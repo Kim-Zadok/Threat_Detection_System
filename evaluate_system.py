@@ -7,7 +7,7 @@ from preprocess import preprocess_data
 
 def evaluate_models():
     # 1. Load Preprocessed Test Data
-    _, X_test, _, y_test = preprocess_data(
+    _, X_test, _, y_test, _ = preprocess_data(
         "DATA/UNSW_NB15_training-set.csv",
         "DATA/UNSW_NB15_testing-set.csv",
     )

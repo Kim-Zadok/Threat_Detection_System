@@ -5,9 +5,9 @@ from preprocess import preprocess_data # Importing your previous work
 
 def train_intelligence_tier():
     # 1. Load and Preprocess Data
-    X_train, X_test, y_train, y_test = preprocess_data(
-        'data/UNSW_NB15_training-set.csv', 
-        'data/UNSW_NB15_testing-set.csv'
+    X_train, X_test, y_train, y_test, _ = preprocess_data(
+        "DATA/UNSW_NB15_training-set.csv",
+        "DATA/UNSW_NB15_testing-set.csv",
     )
 
     # 2. Train Random Forest

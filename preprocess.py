@@ -39,10 +39,14 @@ def preprocess_data(train_path, test_path):
     X_test_scaled = scaler.transform(X_test)
 
     print("Preprocessing complete!")
-    return X_train_scaled, X_test_scaled, y_train, y_test
+    feature_names = list(X_train.columns)
+    return X_train_scaled, X_test_scaled, y_train, y_test, feature_names
 
 # Test the function if run directly
 if __name__ == "__main__":
     # Adjust the paths to match where you saved your CSVs
-    X_train, X_test, y_train, y_test = preprocess_data('data/UNSW_NB15_training-set.csv', 'data/UNSW_NB15_testing-set.csv')
+    X_train, X_test, y_train, y_test, _ = preprocess_data(
+        "DATA/UNSW_NB15_training-set.csv",
+        "DATA/UNSW_NB15_testing-set.csv",
+    )
     print(f"Training data shape: {X_train.shape}")

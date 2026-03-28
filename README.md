@@ -37,8 +37,9 @@ Trained models are persisted with **Joblib** as `rf_model.joblib` and `svm_model
 
 ### Evaluation and demo
 
-- **Evaluation** (`evaluate_system.py`): Loads both models, predicts on the preprocessed test set, and reports **accuracy, precision, recall, and F1**. Optionally saves a bar chart comparing accuracy (`accuracy_comparison.png`).
+- **Evaluation** (`evaluate_system.py`): Loads both models, predicts on the preprocessed test set, and reports **accuracy, precision, recall, and F1**. Saves a bar chart comparing accuracy (`accuracy_comparison.png`).
 - **Demo** (`demo_detection.py`): Loads the Random Forest model and prints predictions for a **small sample** of test rows alongside actual labels.
+- **Visualizations** (`visualize_results.py`): After training, loads saved models and the same preprocessed test data; writes **confusion matrices** for Random Forest and SVM and a **top-15 feature importance** bar chart for Random Forest.
 
 ---
 
@@ -49,24 +50,27 @@ Trained models are persisted with **Joblib** as `rf_model.joblib` and `svm_model
 - **Python 3.10+** (3.11 is used in development)
 - **Dependencies:**
 
+Install everything at once (recommended):
+
+```bash
+pip install -r requirements.txt
+```
+
+Or individually:
+
 ```text
 pandas
 scikit-learn
 joblib
 matplotlib
-```
-
-Install (from the project directory):
-
-```bash
-pip install pandas scikit-learn matplotlib
+seaborn
 ```
 
 If downloads are slow or time out, install large packages separately with a longer timeout, for example:
 
 ```bash
 pip install numpy scipy --default-timeout=600
-pip install pandas scikit-learn matplotlib --default-timeout=600
+pip install -r requirements.txt --default-timeout=600
 ```
 
 ### Data layout
@@ -76,7 +80,7 @@ Ensure the UNSW-NB15 CSVs are available at the paths expected by the scripts:
 - `data/UNSW_NB15_training-set.csv`
 - `data/UNSW_NB15_testing-set.csv`
 
-If your CSVs are only under `DATA/`, either copy or rename the folder to `data`, or update the paths in `preprocess.py`, `train_models.py`, `demo_detection.py`, and `evaluate_system.py` to match your layout.
+The current scripts expect CSVs under **`DATA/`** (see constants at the top of each script). If you use `data/` instead, update the paths consistently.
 
 ### Execution order
 
@@ -98,7 +102,13 @@ If your CSVs are only under `DATA/`, either copy or rename the folder to `data`,
    python demo_detection.py
    ```
 
-4. **Preprocessing only** (optional sanity check of shapes and pipeline):
+4. **Plots** (confusion matrices + feature importance; requires trained `*_model.joblib` files):
+
+   ```bash
+   python visualize_results.py
+   ```
+
+5. **Preprocessing only** (optional sanity check of shapes and pipeline):
 
    ```bash
    python preprocess.py
@@ -115,6 +125,7 @@ cd path\to\threat-detection-system
 python train_models.py
 python evaluate_system.py
 python demo_detection.py
+python visualize_results.py
 ```
 
 ---
@@ -126,6 +137,9 @@ python demo_detection.py
 | `rf_model.joblib` | Trained Random Forest model |
 | `svm_model.joblib` | Trained SVM model |
 | `accuracy_comparison.png` | Bar chart of model accuracies (from `evaluate_system.py`) |
+| `confusion_rf.png` | Random Forest confusion matrix (`visualize_results.py`) |
+| `confusion_svm.png` | SVM confusion matrix (`visualize_results.py`) |
+| `feature_importance.png` | Top 15 Random Forest feature importances (`visualize_results.py`) |
 
 ---
 
@@ -133,11 +147,13 @@ python demo_detection.py
 
 ```text
 threat-detection-system/
-├── DATA/ or data/          # UNSW-NB15 CSVs (paths must match scripts)
+├── DATA/                   # UNSW-NB15 CSVs
+├── requirements.txt        # Python dependencies
 ├── preprocess.py           # Loading, encoding, scaling
 ├── train_models.py         # Train RF and SVM; save Joblib models
-├── evaluate_system.py      # Metrics and optional visualization
+├── evaluate_system.py      # Metrics and accuracy bar chart
 ├── demo_detection.py       # Small-sample prediction demo
+├── visualize_results.py    # Confusion matrices and feature importance
 ├── rf_model.joblib         # Produced after training
 ├── svm_model.joblib        # Produced after training
 └── README.md
